@@ -1,1 +1,7 @@
-export { default as hello } from './hello';
+import getProductsList from './getProductsList';
+import getProductById from './getProductsById';
+
+export {
+    getProductsList,
+    getProductById
+}
