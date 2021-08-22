@@ -1,0 +1,42 @@
+[
+    {
+      "count": 4,
+      "description": "Sodium chloride solution for titrimetric analysis 1 AMP",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80aa",
+      "price": 24.40,
+      "title": "Sodium chloride solution",
+      "image": "https://www.sigmaaldrich.com/deepweb/content/dam/sigma-aldrich/product7/095/titrisol_ampoule_titrisol_ampoule_all.jpg/_jcr_content/renditions/titrisol_ampoule_titrisol_ampoule_all-medium.jpg"
+    },
+    {
+      "count": 6,
+      "description": "Acetonitrile for HPLC 2.5 L",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a0",
+      "price": 401,
+      "title": "Acetonitrile",
+      "image": "https://analyticsshop.tiny.pictures/main/import/RD34851-2.5L.jpg"
+    },
+    {
+      "count": 7,
+      "description": "Potassium bromide for IR spectroscopy 100 G",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a2",
+      "price": 23,
+      "title": "Potassium bromide",
+      "image": "https://5.imimg.com/data5/LP/FT/MY-30586667/potassium-bromide-500x500.jpg"
+    },
+    {
+      "count": 12,
+      "description": "Sufficient for 100 colorimetric tests",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a1",
+      "price": 274,
+      "title": "Chloride Assay Kit",
+      "image": "https://www.sigmaaldrich.com/deepweb/content/dam/sigma-aldrich/product2/199/mak_general-kits.tif/_jcr_content/renditions/mak_general-kits-large.jpg"
+
+    },
+    {
+      "count": 7,
+      "description": "Tetrabutylammonium hydrogensulfate 97% 100 G",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a3",
+      "price": 99,
+      "title": "Tetrabutylammonium hydrogensulfate"
+    }
+  ]
