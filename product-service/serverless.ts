@@ -4,7 +4,7 @@ import type { AWS } from '@serverless/typescript';
 import { getProductsList, getProductById } from './src/functions';
 
 const serverlessConfiguration: AWS = {
-  service: 'product-service',
+  service: 'product-service-be',
   frameworkVersion: '2',
   custom: {
     webpack: {
