@@ -1,15 +1,14 @@
 import 'source-map-support/register';
-
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
+import { APIGatewayProxyHandler } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
+import { getAll as getAllProducts } from '../../db/in-memory';
 
-import schema from './schema';
+const hello: APIGatewayProxyHandler = async () => {
+  const products = getAllProducts();
 
-const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   return formatJSONResponse({
-    message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
-    event,
+    products
   });
 }
 
