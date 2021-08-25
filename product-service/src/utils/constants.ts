@@ -1,5 +1,7 @@
 export enum STATUS_CODES {
-    OK = 200
+    OK = 200,
+    BAD_REQUEST = 400,
+    NOT_FOUND = 404
 };
 
 export const CORS_HEADERS = {

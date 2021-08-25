@@ -1,7 +1,7 @@
 import { getProductsById } from '../handler';
 import { STATUS_CODES } from '../../../utils/constants';
 
-const { OK } = STATUS_CODES;
+const { OK, BAD_REQUEST, NOT_FOUND } = STATUS_CODES;
 
 const createEventObject = (productId) => ({ pathParameters: { productId } });
 
@@ -19,6 +19,24 @@ describe('getProductsById test suite', () => {
             image: 'https://www.sigmaaldrich.com/deepweb/content/dam/sigma-aldrich/product7/095/titrisol_ampoule_titrisol_ampoule_all.jpg/_jcr_content/renditions/titrisol_ampoule_titrisol_ampoule_all-medium.jpg'
         }));
         expect(statusCode).toBe(OK);
+    });
+
+    it('Should return correct status code & message (NO ID)', async () => {
+        const noIdEventObject = createEventObject(null);
+        const { body, statusCode } = await getProductsById(noIdEventObject);
+        expect(body).toEqual(JSON.stringify({
+            message: 'Bad request'
+        }));
+        expect(statusCode).toBe(BAD_REQUEST);
+    });
+
+    it('Should return correct status code & message (NO PRODICT)', async () => {
+        const noIdEventObject = createEventObject('non-existing-id');
+        const { body, statusCode } = await getProductsById(noIdEventObject);
+        expect(body).toEqual(JSON.stringify({
+            message: 'Not found'
+        }));
+        expect(statusCode).toBe(NOT_FOUND);
     });
 
 });
