@@ -8,7 +8,7 @@ const hello: APIGatewayProxyHandler = async () => {
   const products = getAllProducts();
 
   return formatJSONResponse({
-    products
+    ...products
   });
 }
 
