@@ -1,12 +1,14 @@
 import { getProductsById } from '../handler';
-import { STATUS_CODES, RESPONSE_MESSAGES } from '../../../utils/constants';
+import { STATUS_CODES } from '../../../utils/constants';
+import { getBadRequestMessage, getNotFoundMessage } from '../../../utils/responseMessages';
 
 const createEventObject = (productId) => ({ pathParameters: { productId } });
 
 describe('getProductsById test suite', () => {
 
     it('Should return correct status code & product (EXISTING PRODUCT)', async () => {
-        const existingProductEventObject = createEventObject('7567ec4b-b10c-48c5-9345-fc73c48a80aa');
+        const id = '7567ec4b-b10c-48c5-9345-fc73c48a80aa';
+        const existingProductEventObject = createEventObject(id);
         const { body, statusCode } = await getProductsById(existingProductEventObject);
         expect(body).toEqual(JSON.stringify({
             count: 4,
@@ -20,19 +22,21 @@ describe('getProductsById test suite', () => {
     });
 
     it('Should return correct status code & message (NO ID)', async () => {
-        const noIdEventObject = createEventObject(null);
+        const id = null;
+        const noIdEventObject = createEventObject(id);
         const { body, statusCode } = await getProductsById(noIdEventObject);
         expect(body).toEqual(JSON.stringify({
-            message: RESPONSE_MESSAGES.BAD_REQUEST
+            message: getBadRequestMessage(id)
         }));
         expect(statusCode).toBe(STATUS_CODES.BAD_REQUEST);
     });
 
     it('Should return correct status code & message (NO PRODICT)', async () => {
-        const noIdEventObject = createEventObject('non-existing-id');
+        const id = 'non-existing-id';
+        const noIdEventObject = createEventObject(id);
         const { body, statusCode } = await getProductsById(noIdEventObject);
         expect(body).toEqual(JSON.stringify({
-            message: RESPONSE_MESSAGES.NOT_FOUND
+            message: getNotFoundMessage(id)
         }));
         expect(statusCode).toBe(STATUS_CODES.NOT_FOUND);
     });

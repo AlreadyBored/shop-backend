@@ -9,9 +9,3 @@ export const CORS_HEADERS = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': true,
 };
-
-export enum RESPONSE_MESSAGES {
-    BAD_REQUEST = 'Bad request',
-    NOT_FOUND = 'Not_found',
-    INTERNAL_SERVER_ERROR = 'Something went wrong on server side'
-}
