@@ -1,16 +1,17 @@
 import 'source-map-support/register';
-import { APIGatewayProxyHandler } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { getById as getProductById } from '../../db/in-memory';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
-const hello: APIGatewayProxyHandler = async (event) => {
+export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
   const id = event.pathParameters.productId;
+  
   const product = getProductById(id);
 
   return formatJSONResponse({
-    product
+    ...product
   });
 }
 
-export const main = middyfy(hello);
+export const main = middyfy(getProductsById);
