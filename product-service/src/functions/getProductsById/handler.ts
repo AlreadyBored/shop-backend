@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import { formatJSONResponse } from '@libs/apiGateway';
+import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { getById as getProductById } from '../../db/in-memory';
 import { APIGatewayProxyResult } from 'aws-lambda';
@@ -11,18 +11,18 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
   const { productId: id } = event.pathParameters;
 
   if (!id) {
-    return formatJSONResponse(BAD_REQUEST, { message: 'Bad request' });
+    return buildResponse(BAD_REQUEST, { message: 'Bad request' });
   }
 
   const product = getProductById(id);
 
   if (product) {
-    return formatJSONResponse(OK, {
+    return buildResponse(OK, {
       ...product
     });
   }
 
-  return formatJSONResponse(NOT_FOUND, {
+  return buildResponse(NOT_FOUND, {
     message: 'Not found'
   })
 }
