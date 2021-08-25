@@ -6,23 +6,30 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES, RESPONSE_MESSAGES } from '../../utils/constants';
 
 export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
-  const { productId: id } = event.pathParameters;
+  try {
+    const { productId: id } = event.pathParameters;
 
-  if (!id) {
-    return buildResponse(STATUS_CODES.BAD_REQUEST, { message: RESPONSE_MESSAGES.BAD_REQUEST });
-  }
+    if (!id) {
+      return buildResponse(STATUS_CODES.BAD_REQUEST, { message: RESPONSE_MESSAGES.BAD_REQUEST });
+    }
 
-  const product = getProductById(id);
+    const product = getProductById(id);
 
-  if (product) {
-    return buildResponse(STATUS_CODES.OK, {
-      ...product
+    if (product) {
+      return buildResponse(STATUS_CODES.OK, {
+        ...product
+      });
+    }
+
+    return buildResponse(STATUS_CODES.NOT_FOUND, {
+      message: RESPONSE_MESSAGES.NOT_FOUND
+    });
+  } catch (e) {
+    return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {
+      message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR
     });
   }
 
-  return buildResponse(STATUS_CODES.NOT_FOUND, {
-    message: RESPONSE_MESSAGES.NOT_FOUND
-  })
 }
 
 export const main = middyfy(getProductsById);
