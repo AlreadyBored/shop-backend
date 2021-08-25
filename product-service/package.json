@@ -4,7 +4,8 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "jest:clear": "jest --clearCache"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -17,13 +18,16 @@
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",
     "@types/aws-lambda": "^8.10.71",
+    "@types/jest": "^27.0.1",
     "@types/node": "^14.14.25",
-    "jest": "^27.0.6",
+    "aws-lambda-mock-context": "^3.2.1",
+    "jest": "^26.4.2",
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^2.23.0",
     "serverless-webpack": "^5.3.5",
+    "ts-jest": "26.5.5",
     "ts-loader": "^8.0.15",
-    "ts-node": "^9.1.1",
+    "ts-node": "10.2.1",
     "tsconfig-paths": "^3.9.0",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "^4.1.3",

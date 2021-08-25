@@ -1,10 +1,10 @@
 import 'source-map-support/register';
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyResult } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { getAll as getAllProducts } from '../../db/in-memory';
 
-const hello: APIGatewayProxyHandler = async () => {
+export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
   const products = getAllProducts();
 
   return formatJSONResponse({
@@ -12,4 +12,4 @@ const hello: APIGatewayProxyHandler = async () => {
   });
 }
 
-export const main = middyfy(hello);
+export const main = middyfy(getProductsList);
