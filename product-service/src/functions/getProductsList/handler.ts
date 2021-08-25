@@ -5,12 +5,10 @@ import { middyfy } from '@libs/lambda';
 import { getAll as getAllProducts } from '../../db/in-memory';
 import { STATUS_CODES } from '../../utils/constants';
 
-const { OK } = STATUS_CODES;
-
 export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
   const products = getAllProducts();
 
-  return buildResponse(OK, {
+  return buildResponse(STATUS_CODES.OK, {
     ...products
   });
 }

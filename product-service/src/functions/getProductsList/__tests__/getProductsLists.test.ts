@@ -1,8 +1,6 @@
 import { getProductsList } from '../handler';
 import { STATUS_CODES } from '../../../utils/constants';
 
-const { OK } = STATUS_CODES;
-
 jest.mock('@db/chemicals.json', () => ({
     default: [
         {
@@ -68,6 +66,6 @@ describe('getProductsList test suite', () => {
 
     it('Should return correct status code', async () => {
         const { statusCode } = await getProductsList();
-        expect(statusCode).toBe(OK);
+        expect(statusCode).toBe(STATUS_CODES.OK);
     });
 });

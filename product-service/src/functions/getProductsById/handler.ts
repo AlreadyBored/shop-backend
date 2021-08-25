@@ -3,27 +3,25 @@ import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { getById as getProductById } from '../../db/in-memory';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { STATUS_CODES } from '../../utils/constants';
-
-const { OK, BAD_REQUEST, NOT_FOUND } = STATUS_CODES;
+import { STATUS_CODES, RESPONSE_MESSAGES } from '../../utils/constants';
 
 export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
   const { productId: id } = event.pathParameters;
 
   if (!id) {
-    return buildResponse(BAD_REQUEST, { message: 'Bad request' });
+    return buildResponse(STATUS_CODES.BAD_REQUEST, { message: RESPONSE_MESSAGES.BAD_REQUEST });
   }
 
   const product = getProductById(id);
 
   if (product) {
-    return buildResponse(OK, {
+    return buildResponse(STATUS_CODES.OK, {
       ...product
     });
   }
 
-  return buildResponse(NOT_FOUND, {
-    message: 'Not found'
+  return buildResponse(STATUS_CODES.NOT_FOUND, {
+    message: RESPONSE_MESSAGES.NOT_FOUND
   })
 }
 
