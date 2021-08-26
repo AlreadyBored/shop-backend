@@ -20,7 +20,7 @@ export default {
           description: "Get single chemical by id",
           pathParams: [
             {
-              name: "id",
+              name: "productId",
               description: "Chemical id",
               schema: {
                 type: "string",
