@@ -1,4 +1,6 @@
 openapi: 3.0.0
+servers: 
+  - url: https://4s16c0gjyi.execute-api.eu-west-1.amazonaws.com/dev
 components:
   schemas:
     Chemical:
@@ -77,6 +79,13 @@ paths:
           content: {}
   '/products/{productId}':
     get:
+      parameters: 
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: Single chemical id
       operationId: getProductById
       summary: getProductsById
       description: Get single chemical by id
