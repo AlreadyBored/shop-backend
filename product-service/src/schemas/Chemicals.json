@@ -36,7 +36,7 @@
                     "description": "Amount of chemical (or its quantity)"
                 },
                 "image": {
-                    "type": "number",
+                    "type": "string",
                     "description": "Link to chemical image"
                 }
             }
