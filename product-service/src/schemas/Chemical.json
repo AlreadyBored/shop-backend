@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "title": "Schema of single chemical",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique chemical identifier"
+        },
+        "title": {
+            "type": "string",
+            "description": "Short chemical name"
+        },
+        "description": {
+            "type": "string",
+            "description": "Additional chemical info"
+        },
+        "price": {
+            "type": "number",
+            "description": "Chemical price"
+        },
+        "count": {
+            "type": "number",
+            "description": "Amount of chemical (or its quantity)"
+        },
+        "image": {
+            "type": "number",
+            "description": "Link to chemical image"
+        }
+    },
+    "additionalProperties": false
+}

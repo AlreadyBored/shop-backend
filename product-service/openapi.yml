@@ -1,0 +1,107 @@
+openapi: 3.0.0
+servers: 
+  - url: https://4s16c0gjyi.execute-api.eu-west-1.amazonaws.com/dev
+components:
+  schemas:
+    Chemical:
+      title: Schema of single chemical
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique chemical identifier
+        title:
+          type: string
+          description: Short chemical name
+        description:
+          type: string
+          description: Additional chemical info
+        price:
+          type: number
+          description: Chemical price
+        count:
+          type: number
+          description: Amount of chemical (or its quantity)
+        image:
+          type: number
+          description: Link to chemical image
+      additionalProperties: false
+    Chemicals:
+      title: Schema of multiple chemicals
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Unique chemical identifier
+              title:
+                type: string
+                description: Short chemical name
+              description:
+                type: string
+                description: Additional chemical info
+              price:
+                type: number
+                description: Chemical price
+              count:
+                type: number
+                description: Amount of chemical (or its quantity)
+              image:
+                type: number
+                description: Link to chemical image
+      additionalProperties: false
+  securitySchemes: {}
+info:
+  title: Shop-BE
+  description: Chemicals store API
+  version: 1.0.0
+paths:
+  /products:
+    get:
+      operationId: getProductsList
+      summary: getProductsList
+      description: Get all chemicals
+      responses:
+        '200':
+          description: All chemicals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chemicals'
+        '500':
+          description: Server side error occured
+          content: {}
+  '/products/{productId}':
+    get:
+      parameters: 
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: Single chemical id
+      operationId: getProductById
+      summary: getProductsById
+      description: Get single chemical by id
+      responses:
+        '200':
+          description: Single chemical
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chemical'
+        '400':
+          description: Chemical id is not provided
+          content: {}
+        '404':
+          description: Chemical with provided id is not found
+          content: {}
+        '500':
+          description: Server side error occured
+          content: {}
