@@ -4,6 +4,7 @@ import { ChemicalSchema, ChemicalsSchema } from './src/schemas';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service-be',
+  useDotenv: true,
   frameworkVersion: '2',
   custom: {
     webpack: {
