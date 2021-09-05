@@ -2,13 +2,13 @@ import 'source-map-support/register';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { getAll as getAllProducts } from '../../db/in-memory';
 import { STATUS_CODES } from '../../utils/constants';
 import { getInternalServerErrorMessage } from '../../utils/responseMessages';
+import * as productService from '../../services/product';
 
 export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
   try {
-    const products = getAllProducts();
+    const products = await productService.getAllProducts();
 
     return buildResponse(STATUS_CODES.OK, {
       ...products

@@ -1,10 +1,10 @@
 import 'source-map-support/register';
 import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { getById as getProductById } from '../../db/in-memory';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
 import { getBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
+import * as productService from '../../services/product';
 
 export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
   try {
@@ -14,7 +14,7 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getBadRequestMessage(id) });
     }
 
-    const product = getProductById(id);
+    const product = await productService.getSingleProduct(id);
 
     if (product) {
       return buildResponse(STATUS_CODES.OK, {
