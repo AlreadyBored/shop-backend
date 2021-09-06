@@ -14,6 +14,7 @@ export class ProductRepository {
     async fillDatabase() {
         try {
             await this._db.connect();
+            await this._db.client.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
             await this._db.client.query(CREATE_PRODUCTS);
             await this._db.client.query(CREATE_STOCK);
             const checkProductsResult = await this._db.client.query('SELECT * FROM products');
@@ -42,7 +43,7 @@ export class ProductRepository {
     async getSingleProduct(id: string) {
         try {
             await this._db.connect();
-            return await this._db.client.query(`SELECT * FROM PRODUCTS WHERE id=${id}`);
+            return await this._db.client.query(`SELECT * FROM PRODUCTS WHERE id='${id}'`);
         } catch (e) {
             throw e;
         } finally {

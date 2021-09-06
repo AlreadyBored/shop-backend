@@ -8,6 +8,7 @@ import * as productService from '../../services/product';
 
 export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
   try {
+    await productService.fillDB();
     const products = await productService.getAllProducts();
 
     return buildResponse(STATUS_CODES.OK, {

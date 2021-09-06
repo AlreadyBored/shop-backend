@@ -13,7 +13,8 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
     if (!id) {
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getBadRequestMessage(id) });
     }
-
+    
+    await productService.fillDB();
     const product = await productService.getSingleProduct(id);
 
     if (product) {
