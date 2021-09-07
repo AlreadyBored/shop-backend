@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-import { getProductsList, getProductById } from './src/functions';
+import { getProductsList, getProductById, addProduct } from './src/functions';
 import { ChemicalSchema, ChemicalsSchema } from './src/schemas';
 
 const serverlessConfiguration: AWS = {
@@ -46,7 +46,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { getProductsList, getProductById },
+  functions: { getProductsList, getProductById, addProduct },
 };
 
 module.exports = serverlessConfiguration;
