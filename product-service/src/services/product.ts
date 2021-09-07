@@ -1,8 +1,8 @@
 import { ProductRepository } from '../repositories/product';
 
-export const fillDB = async () => {
+export const restoreDefaults = async () => {
     const productsRepository = new ProductRepository();
-    await productsRepository.fillDatabase();
+    await productsRepository.restoreDefaults();
 };
 
 export const getAllProducts = async () => {

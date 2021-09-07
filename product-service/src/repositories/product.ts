@@ -1,8 +1,5 @@
 import { Database } from '../db/db';
-import { INITIAL_QUERIES } from '../utils/constants';
-
-const { CREATE_PRODUCTS, CREATE_STOCK, FILL_PRODUCTS, FILL_STOCK } = INITIAL_QUERIES;
-
+import { RESTORE_DEFAULTS_QUERY } from '../utils/constants';
 
 export class ProductRepository {
     _db: Database
@@ -11,16 +8,10 @@ export class ProductRepository {
         this._db = new Database();
     }
 
-    async fillDatabase() {
+    async restoreDefaults() {
         try {
             await this._db.connect();
-            await this._db.client.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
-            await this._db.client.query(CREATE_PRODUCTS);
-            await this._db.client.query(CREATE_STOCK);
-            const checkProductsResult = await this._db.client.query('SELECT * FROM products');
-            if (checkProductsResult.rowCount) return;
-            await this._db.client.query(FILL_PRODUCTS);
-            await this._db.client.query(FILL_STOCK);
+            await this._db.client.query(RESTORE_DEFAULTS_QUERY);
         } catch (e) {
             throw e;
         } finally {
