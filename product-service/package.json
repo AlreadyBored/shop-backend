@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "jest:clear": "jest --clearCache",
-    "docs": "sls openapi generate -o openapi.yml -f yaml -i 2"
+    "docs": "sls openapi generate -o openapi.yml -f yaml -i 2",
+    "deploy": "sls deploy"
   },
   "engines": {
     "node": ">=14.15.0"
