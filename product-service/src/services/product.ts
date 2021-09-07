@@ -16,3 +16,9 @@ export const getSingleProduct = async (id: string) => {
     const product = await productsRepository.getSingleProduct(id);
     return product.rows;
 };
+
+export const addProduct = async (productDTO) => {
+    const productsRepository = new ProductRepository();
+    const product = await productsRepository.addProduct(productDTO);
+    return product.rows;
+}

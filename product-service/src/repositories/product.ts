@@ -52,4 +52,28 @@ export class ProductRepository {
 
     }
 
+    async addProduct(productDTO) {
+        try {
+            const { title, description, price, image } = productDTO;
+            await this._db.connect();
+            const productCreationResult = await this._db.client.query(`
+            INSERT INTO 
+            products (title, description, price, image)
+            values ('${title}', '${description}', ${price}, '${image}')
+            `);
+            const product = productCreationResult.rows[0]
+            const { id } = product;
+            await this._db.client.query(`
+            INSERT INTO 
+            stock (product_id, count)
+            values ('${id}', 0)
+            `);
+            return product;
+        } catch (e) {
+            throw e;
+        } finally {
+            await this._db.disconnect();
+        }
+    }
+
 }
