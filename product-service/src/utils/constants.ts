@@ -45,5 +45,6 @@ export enum INITIAL_QUERIES {
     ('7567ec4b-b10c-48c5-9345-fc73c48a80a1', 4),
     ('7567ec4b-b10c-48c5-9345-fc73c48a80a3', 5)
     `
-
 }
+
+export const UUID_V4_REGEXP = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
