@@ -4,11 +4,15 @@ import { middyfy } from '@libs/lambda';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
 import { getSingleProductBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
+import { logRequest } from '../../utils/consoleLogger';
 import * as productService from '../../services/product';
 import { DatabaseConnection } from '../../db/db';
 
 export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
   try {
+    const { body, pathParameters, queryStringParameters, headers } = event;
+    logRequest({ body, pathParameters, queryStringParameters, headers });
+
     const { productId: id } = event.pathParameters;
 
     if (!id) {

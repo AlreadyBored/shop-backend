@@ -5,11 +5,15 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
 import { isBodyValid } from '../../utils/validateRequestBody';
 import { addProductBadRequestMessage, getInternalServerErrorMessage } from '../../utils/responseMessages';
+import { logRequest } from '../../utils/consoleLogger';
 import * as productService from '../../services/product';
 import { DatabaseConnection } from '../../db/db';
 
 export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
   try {
+    const { body, pathParameters, queryStringParameters, headers } = event;
+    logRequest({ body, pathParameters, queryStringParameters, headers });
+
     if (!isBodyValid(event.body)) {
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: addProductBadRequestMessage });
     }
