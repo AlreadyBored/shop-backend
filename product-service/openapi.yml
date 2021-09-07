@@ -77,6 +77,23 @@ paths:
         '500':
           description: Server side error occured
           content: {}
+    post:
+      operationId: addProduct
+      summary: addProduct
+      description: Add single chemical
+      responses:
+        '200':
+          description: Single chemical
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chemical'
+        '400':
+          description: Request body is invalid
+          content: {}
+        '500':
+          description: Server side error occured
+          content: {}
   '/products/{productId}':
     get:
       parameters: 
@@ -101,6 +118,18 @@ paths:
           content: {}
         '404':
           description: Chemical with provided id is not found
+          content: {}
+        '500':
+          description: Server side error occured
+          content: {}
+  /products-default:
+    put:
+      operationId: restoreDefaultProducts
+      summary: restoreDefaultProducts
+      description: Restore default chemicals
+      responses:
+        '200':
+          description: Chemicals were successfully restored
           content: {}
         '500':
           description: Server side error occured
