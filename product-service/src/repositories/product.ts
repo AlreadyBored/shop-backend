@@ -54,21 +54,20 @@ export class ProductRepository {
 
     async addProduct(productDTO) {
         try {
-            const { title, description, price, image } = productDTO;
+            const { id, title, description, price, image } = productDTO;
             await this._db.connect();
-            const productCreationResult = await this._db.client.query(`
-            INSERT INTO 
-            products (title, description, price, image)
-            values ('${title}', '${description}', ${price}, '${image}')
+            await this._db.client.query(`
+                INSERT INTO
+                products (${id ? 'id, ' : ''}title, description, price, image)
+                VALUES (${id ? `'${id}', ` : ''}'${title}', '${description}', ${price}, '${image}')
             `);
-            const product = productCreationResult.rows[0]
-            const { id } = product;
+            const product = await this._db.client.query(`SELECT * FROM products WHERE title = '${title}'`);
             await this._db.client.query(`
             INSERT INTO 
             stock (product_id, count)
-            values ('${id}', 0)
-            `);
-            return product;
+            VALUES ('${product.rows[0].id}', 0)
+            `)
+            return product.rows[0];
         } catch (e) {
             throw e;
         } finally {

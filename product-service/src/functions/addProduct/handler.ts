@@ -27,6 +27,6 @@ export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
     });
   }
 
-}
+};
 
 export const main = middyfy(addProduct);
