@@ -31,7 +31,11 @@ export class ProductRepository {
     async getAllProducts() {
         try {
             await this._db.connect();
-            return await this._db.client.query('SELECT * FROM products');
+            return await this._db.client.query(`
+                SELECT p.id, title, description, price, image, count 
+                FROM products p 
+                JOIN stock s ON p.id = s.product_id
+            `);
         } catch (e) {
             throw e;
         } finally {
@@ -43,7 +47,12 @@ export class ProductRepository {
     async getSingleProduct(id: string) {
         try {
             await this._db.connect();
-            return await this._db.client.query(`SELECT * FROM PRODUCTS WHERE id='${id}'`);
+            return await this._db.client.query(`
+                SELECT p.id, title, description, price, image, count 
+                FROM products p 
+                JOIN stock s ON p.id = s.product_id 
+                WHERE p.id='${id}'
+            `);
         } catch (e) {
             throw e;
         } finally {
@@ -63,11 +72,17 @@ export class ProductRepository {
             `);
             const product = await this._db.client.query(`SELECT * FROM products WHERE title = '${title}'`);
             await this._db.client.query(`
-            INSERT INTO 
-            stock (product_id, count)
-            VALUES ('${product.rows[0].id}', 0)
-            `)
-            return product.rows[0];
+                INSERT INTO 
+                stock (product_id, count)
+                VALUES ('${product.rows[0].id}', 1)
+            `);
+            const fullProduct = await this._db.client.query(`
+                SELECT p.id, title, description, price, image, count 
+                FROM products p 
+                JOIN stock s ON p.id = s.product_id 
+                WHERE p.id='${product.rows[0].id}'
+            `);
+            return fullProduct.rows[0];
         } catch (e) {
             throw e;
         } finally {
