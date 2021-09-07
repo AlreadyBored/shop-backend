@@ -5,6 +5,7 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
 import { getSingleProductBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
 import * as productService from '../../services/product';
+import { DatabaseConnection } from '../../db/db';
 
 export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
   try {
@@ -13,9 +14,10 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
     if (!id) {
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getSingleProductBadRequestMessage(id) });
     }
-    
-    await productService.fillDB();
-    const product = await productService.getSingleProduct(id);
+
+    await DatabaseConnection.connect();
+
+    const product = await productService.getSingleProduct(DatabaseConnection.client, id);
 
     if (product) {
       return buildResponse(STATUS_CODES.OK, {
@@ -30,8 +32,9 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
     return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {
       message: getInternalServerErrorMessage(e)
     });
+  } finally {
+    await DatabaseConnection.disconnect();
   }
-
 }
 
 export const main = middyfy(getProductsById);

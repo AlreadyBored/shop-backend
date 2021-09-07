@@ -16,23 +16,15 @@ const connectionOptions = {
     connectionTimeoutMillis: 5000
 };
 
-export class Database {
-    _client: Client;
+export class DatabaseConnection {
+    static client = new Client(connectionOptions);
 
-    constructor() {
-        this._client = new Client(connectionOptions);
+    static async connect() {
+        await DatabaseConnection.client.connect();
     }
 
-    get client() {
-        return this._client;
-    }
-
-    async connect() {
-        await this._client.connect();
-    }
-
-    async disconnect() {
-        await this._client.end();
+    static async disconnect() {
+        await DatabaseConnection.client.end();
     }
 
 }

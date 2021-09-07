@@ -6,6 +6,7 @@ import { STATUS_CODES } from '../../utils/constants';
 import { isBodyValid } from '../../utils/validateRequestBody';
 import { addProductBadRequestMessage, getInternalServerErrorMessage } from '../../utils/responseMessages';
 import * as productService from '../../services/product';
+import { DatabaseConnection } from '../../db/db';
 
 export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
   try {
@@ -13,7 +14,9 @@ export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: addProductBadRequestMessage });
     }
 
-    const product = await productService.addProduct(event.body);
+    await DatabaseConnection.connect();
+
+    const product = await productService.addProduct(DatabaseConnection.client, event.body);
 
     if (product) {
       return buildResponse(STATUS_CODES.OK, {
@@ -25,8 +28,9 @@ export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
     return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {
       message: getInternalServerErrorMessage(e)
     });
+  } finally {
+    await DatabaseConnection.disconnect();
   }
-
 };
 
 export const main = middyfy(addProduct);
