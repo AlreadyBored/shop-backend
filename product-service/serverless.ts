@@ -1,6 +1,11 @@
 import type { AWS } from '@serverless/typescript';
+import dotenv from 'dotenv';
 import { getProductsList, getProductById, addProduct } from './src/functions';
 import { ChemicalSchema, ChemicalsSchema } from './src/schemas';
+
+dotenv.config({
+  path: __dirname + './env'
+});
 
 const serverlessConfiguration: AWS = {
   service: 'product-service-be',
@@ -43,6 +48,11 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      PG_HOST: '${env:PG_HOST}',
+      PG_PORT: '${env:PG_PORT}',
+      PG_DATABASE: '${env:PG_DATABASE}',
+      PG_USERNAME: '${env:PG_USERNAME}',
+      PG_PASSWORD: '${env:PG_PASSWORD}'
     },
     lambdaHashingVersion: '20201221',
   },
