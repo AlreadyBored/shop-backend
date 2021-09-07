@@ -12,7 +12,7 @@ export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
     const products = await productService.getAllProducts();
 
     return buildResponse(STATUS_CODES.OK, {
-      ...products
+      products
     });
   } catch (e) {
     return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {

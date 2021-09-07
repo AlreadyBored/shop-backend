@@ -3,7 +3,7 @@ import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
-import { getBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
+import { getSingleProductBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
 import * as productService from '../../services/product';
 
 export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
@@ -11,7 +11,7 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
     const { productId: id } = event.pathParameters;
 
     if (!id) {
-      return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getBadRequestMessage(id) });
+      return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getSingleProductBadRequestMessage(id) });
     }
     
     await productService.fillDB();
