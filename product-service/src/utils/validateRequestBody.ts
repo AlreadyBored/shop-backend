@@ -33,7 +33,7 @@ export const isBodyValid = (body: IBody) => {
             required: true,
         },
         price: {
-            type: 'string',
+            type: 'number',
             required: true,
         },
         image: {
@@ -45,8 +45,12 @@ export const isBodyValid = (body: IBody) => {
     for (let [key, validationProps] of Object.entries(bodyFields)) {
         const { type, required, validator } = validationProps;
         const incomingValue = body[key];
-        if (required) {
-            if (!incomingValue) return false;
+        if (!incomingValue) {
+            if (required) {
+                return false;
+            } else {
+                continue;
+            }
         }
         if (typeof incomingValue !== type) return false;
         if (validator) {
