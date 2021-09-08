@@ -27,6 +27,23 @@ components:
           type: number
           description: Link to chemical image
       additionalProperties: false
+    ChemicalDTO:
+      title: Schema of chemical DTO
+      type: object
+      properties:
+        title:
+          type: string
+          description: Short chemical name
+        description:
+          type: string
+          description: Additional chemical info
+        price:
+          type: number
+          description: Chemical price
+        image:
+          type: string
+          description: Link to chemical image
+      additionalProperties: false
     Chemicals:
       title: Schema of multiple chemicals
       type: object
@@ -81,6 +98,13 @@ paths:
       operationId: addProduct
       summary: addProduct
       description: Add single chemical
+      requestBody:
+        description: New chemical object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChemicalDTO'
       responses:
         '200':
           description: Single chemical
