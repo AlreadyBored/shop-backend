@@ -10,6 +10,7 @@ import * as productService from '../../services/product';
 import { DatabaseConnection } from '../../db/db';
 
 export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
+  let isConnected = false;
   try {
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ body, pathParameters, queryStringParameters, headers });
@@ -20,6 +21,8 @@ export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
 
     await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
+
+    isConnected = true;
 
     const product = await productService.addProduct(DatabaseConnection.client, event.body);
 
@@ -34,7 +37,7 @@ export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
       message: getInternalServerErrorMessage(e)
     });
   } finally {
-    await DatabaseConnection.disconnect();
+    if (isConnected) await DatabaseConnection.disconnect();
   }
 };
 

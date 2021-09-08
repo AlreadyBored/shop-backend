@@ -9,12 +9,15 @@ import * as productService from '../../services/product';
 import { DatabaseConnection } from '../../db/db';
 
 export const restoreDefaultProducts = async (event): Promise<APIGatewayProxyResult> => {
+  let isConnected = false;
   try {
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ body, pathParameters, queryStringParameters, headers });
 
     await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
+
+    isConnected = true;
 
     await productService.restoreDefaults(DatabaseConnection.client);
     return buildResponse(STATUS_CODES.OK, {
@@ -25,7 +28,7 @@ export const restoreDefaultProducts = async (event): Promise<APIGatewayProxyResu
       message: getInternalServerErrorMessage(e)
     });
   } finally {
-    await DatabaseConnection.disconnect();
+    if (isConnected) await DatabaseConnection.disconnect();
   }
 }
 
