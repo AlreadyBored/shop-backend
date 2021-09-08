@@ -13,6 +13,7 @@ export const restoreDefaultProducts = async (event): Promise<APIGatewayProxyResu
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ body, pathParameters, queryStringParameters, headers });
 
+    await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
 
     await productService.restoreDefaults(DatabaseConnection.client);

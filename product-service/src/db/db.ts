@@ -17,7 +17,12 @@ const connectionOptions = {
 };
 
 export class DatabaseConnection {
-    static client = new Client(connectionOptions);
+
+    static client = null;
+
+    static createClient() {
+        DatabaseConnection.client = new Client(connectionOptions);
+    }
 
     static async connect() {
         await DatabaseConnection.client.connect();

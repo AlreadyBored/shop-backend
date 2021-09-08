@@ -18,6 +18,7 @@ export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: addProductBadRequestMessage });
     }
 
+    await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
 
     const product = await productService.addProduct(DatabaseConnection.client, event.body);

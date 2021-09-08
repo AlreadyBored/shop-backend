@@ -19,6 +19,7 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
       return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getSingleProductBadRequestMessage(id) });
     }
 
+    await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
 
     const product = await productService.getSingleProduct(DatabaseConnection.client, id);

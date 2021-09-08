@@ -13,6 +13,7 @@ export const getProductsList = async (event): Promise<APIGatewayProxyResult> => 
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ body, pathParameters, queryStringParameters, headers });
 
+    await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
     const products = await productService.getAllProducts(DatabaseConnection.client);
 
