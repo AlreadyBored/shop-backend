@@ -32,28 +32,37 @@ export class ProductRepository {
     async addProduct(productDTO) {
         const { id, title, description, price, image } = productDTO;
 
-        await this._client.query(`
+        try {
+            await this._client.query('begin');
+
+            await this._client.query(`
                 INSERT INTO
                 products (${id ? 'id, ' : ''}title, description, price, image)
                 VALUES (${id ? `'${id}', ` : ''}'${title}', '${description}', ${price}, '${image}')
             `);
 
-        const product = await this._client.query(`SELECT * FROM products WHERE title = '${title}'`);
+            const product = await this._client.query(`SELECT * FROM products WHERE title = '${title}'`);
 
-        await this._client.query(`
+            await this._client.query(`
                 INSERT INTO 
                 stock (product_id, count)
                 VALUES ('${product.rows[0].id}', 1)
             `);
 
-        const fullProduct = await this._client.query(`
+            const fullProduct = await this._client.query(`
                 SELECT p.id, title, description, price, image, count 
                 FROM products p 
                 JOIN stock s ON p.id = s.product_id 
                 WHERE p.id='${product.rows[0].id}'
             `);
 
-        return fullProduct.rows[0];
+            await this._client.query('commit');
+
+            return fullProduct.rows[0];
+        } catch (e) {
+            await this._client.query('rollback');
+            throw e;
+        }
     }
 
 }
