@@ -4,8 +4,6 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "test": "jest",
-    "jest:clear": "jest --clearCache",
     "docs": "sls openapi generate -o openapi.yml -f yaml -i 2",
     "deploy": "sls deploy"
   },
