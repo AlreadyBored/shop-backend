@@ -24,7 +24,7 @@ components:
           type: number
           description: Amount of chemical (or its quantity)
         image:
-          type: number
+          type: string
           description: Link to chemical image
       additionalProperties: false
     ChemicalDTO:
@@ -70,7 +70,7 @@ components:
                 type: number
                 description: Amount of chemical (or its quantity)
               image:
-                type: number
+                type: string
                 description: Link to chemical image
       additionalProperties: false
   securitySchemes: {}
