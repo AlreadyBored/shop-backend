@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers: 
-  - url: https://4s16c0gjyi.execute-api.eu-west-1.amazonaws.com/dev
+  - url: https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev
 components:
   schemas:
     Chemical:
