@@ -13,12 +13,7 @@ Depending on your preferred package manager, follow the instructions below to de
 ### Using NPM
 
 - Run `npm i` to install the project dependencies
-- Run `npx sls deploy` to deploy this stack to AWS
-
-### Using Yarn
-
-- Run `yarn` to install the project dependencies
-- Run `yarn sls deploy` to deploy this stack to AWS
+- Run `npm run deploy` to deploy this stack to AWS
 
 ### Task 4.1 SQL script to fill DB
 
@@ -60,3 +55,38 @@ INSERT INTO stock (product_id, count)
     ('7567ec4b-b10c-48c5-9345-fc73c48a80a1', 4),
     ('7567ec4b-b10c-48c5-9345-fc73c48a80a3', 5);
 ```
+
+### Lambdas
+
+There are few lambdas currently in products-service:
+* `getProductsList` — returns all products from database
+* `getProductById` — finds by id and returns single product from database 
+* `addProduct` — adds single product to database
+* `restoreDefaultProducts` — restore initial products in database (as in SQL script above)
+
+### Endpoints
+
+Their APIGateway endpoints:
+* `getProductsList` — GET - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products
+* `getProductById` — GET - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products/{productId}
+* `addProduct` — POST - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products
+* `restoreDefaultProducts` — PUT - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products-default
+
+More about endpoints at [SWAGGER](https://app.swaggerhub.com/apis/AlreadyBored/shop-be/1.0.0) (you can also look at `openapi.yml` in product-service root folder).
+
+### Frontend
+
+[Link to frontend](https://d20o7asvvy1rtc.cloudfront.net)
+
+Products on frontend are now integreated with database. Try it out by using `addProduct` lambda:
+1. Add product using POSTMAN or SWAGGER (see above)
+2. Refresh frontend page
+3. Newly created product appears
+
+P.S. I recommend you to run `restoreDefaultProducts` lambda to clear database from products created by previous cross-checker before you try it :)
+
+[Link to frontend repository (if needed)](https://github.com/AlreadyBored/shop-vue-vuex-cloudfront)
+
+### Transactions
+
+Product creation process is implemented using SQL transactions (look at method `addProduct` in `src/repositories/product.ts`)
