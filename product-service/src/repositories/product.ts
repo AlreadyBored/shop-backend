@@ -35,25 +35,26 @@ export class ProductRepository {
         try {
             await this._client.query('begin');
 
-            await this._client.query(`
+            const creationRes = await this._client.query(`
                 INSERT INTO
                 products (${id ? 'id, ' : ''}title, description, price, image)
                 VALUES (${id ? `'${id}', ` : ''}'${title}', '${description}', ${price}, '${image}')
+                RETURNING *
             `);
 
-            const product = await this._client.query(`SELECT * FROM products WHERE title = '${title}'`);
+            const { id: createdProductId } = creationRes.rows[0];
 
             await this._client.query(`
                 INSERT INTO 
                 stock (product_id, count)
-                VALUES ('${product.rows[0].id}', 1)
+                VALUES ('${createdProductId}', 1)
             `);
 
             const fullProduct = await this._client.query(`
                 SELECT p.id, title, description, price, image, count 
                 FROM products p 
                 JOIN stock s ON p.id = s.product_id 
-                WHERE p.id='${product.rows[0].id}'
+                WHERE p.id='${createdProductId}'
             `);
 
             await this._client.query('commit');
