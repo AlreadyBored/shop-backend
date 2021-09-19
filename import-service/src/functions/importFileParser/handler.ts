@@ -11,6 +11,7 @@ const { ACCEPTED, INTERNAL_SERVER_ERROR } = STATUS_CODES
 const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
   try {
     const { Records } = event;
+    console.log('[EVENT]', event);
 
     Records.forEach(record => {
       const { key: fileName } = record.s3.object;
@@ -19,6 +20,8 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
         Bucket: BUCKET_NAME,
         Key: fileName
       };
+
+      console.log('[PARAMS]', params);
 
       const s3Bucket = new AWS.S3({ region: REGION });
 
@@ -35,7 +38,7 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
         })
         .on('end', async () => {
           const sourceName = `${BUCKET_NAME}/${fileName}`;
-          const destName = sourceName.replace(UPLOAD_PREFIX, PARSE_PREFIX);
+          const destName = fileName.replace(UPLOAD_PREFIX, PARSE_PREFIX);
 
           const copyParams = {
             Bucket: BUCKET_NAME,
