@@ -1,9 +1,7 @@
-const getBadRequestMessage = id => `You have to provide correct id instead of ${id}`;
-const getNotFoundMessage = id => `Product with ${id} is not found`;
-const getInternalServerErrorMessage = err => `Something went wrong on server side: ${err} occured`;
+export const getSingleProductBadRequestMessage = id => `You have to provide correct id instead of ${id}`;
 
-export {
-    getBadRequestMessage,
-    getNotFoundMessage,
-    getInternalServerErrorMessage
-};
+export const getNotFoundMessage = id => `Product with ${id} is not found`;
+
+export const getInternalServerErrorMessage = err => `Something went wrong on server side: ${err}`;
+
+export const addProductBadRequestMessage = `Invalid requests body`;

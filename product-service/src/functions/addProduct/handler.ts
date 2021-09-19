@@ -3,21 +3,20 @@ import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
-import { getSingleProductBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
+import { isBodyValid } from '../../utils/validateRequestBody';
+import { addProductBadRequestMessage, getInternalServerErrorMessage } from '../../utils/responseMessages';
 import { logRequest } from '../../utils/consoleLogger';
 import * as productService from '../../services/product';
 import { DatabaseConnection } from '../../db/db';
 
-export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
+export const addProduct = async (event): Promise<APIGatewayProxyResult> => {
   let isConnected = false;
   try {
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ body, pathParameters, queryStringParameters, headers });
 
-    const { productId: id } = event.pathParameters;
-
-    if (!id) {
-      return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getSingleProductBadRequestMessage(id) });
+    if (!isBodyValid(event.body)) {
+      return buildResponse(STATUS_CODES.BAD_REQUEST, { message: addProductBadRequestMessage });
     }
 
     await DatabaseConnection.createClient();
@@ -25,7 +24,7 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
 
     isConnected = true;
 
-    const product = await productService.getSingleProduct(DatabaseConnection.client, id);
+    const product = await productService.addProduct(DatabaseConnection.client, event.body);
 
     if (product) {
       return buildResponse(STATUS_CODES.OK, {
@@ -33,9 +32,6 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
       });
     }
 
-    return buildResponse(STATUS_CODES.NOT_FOUND, {
-      message: getNotFoundMessage(id)
-    });
   } catch (e) {
     return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {
       message: getInternalServerErrorMessage(e)
@@ -43,6 +39,6 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
   } finally {
     if (isConnected) await DatabaseConnection.disconnect();
   }
-}
+};
 
-export const main = middyfy(getProductsById);
+export const main = middyfy(addProduct);

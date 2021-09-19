@@ -2,21 +2,34 @@ import 'source-map-support/register';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { getAll as getAllProducts } from '../../db/in-memory';
 import { STATUS_CODES } from '../../utils/constants';
 import { getInternalServerErrorMessage } from '../../utils/responseMessages';
+import { logRequest } from '../../utils/consoleLogger';
+import * as productService from '../../services/product';
+import { DatabaseConnection } from '../../db/db';
 
-export const getProductsList = async (): Promise<APIGatewayProxyResult> => {
+export const getProductsList = async (event): Promise<APIGatewayProxyResult> => {
+  let isConnected = false;
   try {
-    const products = getAllProducts();
+    const { body, pathParameters, queryStringParameters, headers } = event;
+    logRequest({ body, pathParameters, queryStringParameters, headers });
+
+    await DatabaseConnection.createClient();
+    await DatabaseConnection.connect();
+
+    isConnected = true;
+
+    const products = await productService.getAllProducts(DatabaseConnection.client);
 
     return buildResponse(STATUS_CODES.OK, {
-      ...products
+      products
     });
   } catch (e) {
     return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {
       message: getInternalServerErrorMessage(e)
     });
+  } finally {
+    if (isConnected) await DatabaseConnection.disconnect();
   }
 }
 

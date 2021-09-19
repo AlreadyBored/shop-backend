@@ -1,40 +1,27 @@
 import 'source-map-support/register';
+import { APIGatewayProxyResult } from 'aws-lambda';
 import { buildResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { APIGatewayProxyResult } from 'aws-lambda';
 import { STATUS_CODES } from '../../utils/constants';
-import { getSingleProductBadRequestMessage, getInternalServerErrorMessage, getNotFoundMessage } from '../../utils/responseMessages';
+import { getInternalServerErrorMessage } from '../../utils/responseMessages';
 import { logRequest } from '../../utils/consoleLogger';
 import * as productService from '../../services/product';
 import { DatabaseConnection } from '../../db/db';
 
-export const getProductsById = async (event): Promise<APIGatewayProxyResult> => {
+export const restoreDefaultProducts = async (event): Promise<APIGatewayProxyResult> => {
   let isConnected = false;
   try {
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ body, pathParameters, queryStringParameters, headers });
-
-    const { productId: id } = event.pathParameters;
-
-    if (!id) {
-      return buildResponse(STATUS_CODES.BAD_REQUEST, { message: getSingleProductBadRequestMessage(id) });
-    }
 
     await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
 
     isConnected = true;
 
-    const product = await productService.getSingleProduct(DatabaseConnection.client, id);
-
-    if (product) {
-      return buildResponse(STATUS_CODES.OK, {
-        ...product
-      });
-    }
-
-    return buildResponse(STATUS_CODES.NOT_FOUND, {
-      message: getNotFoundMessage(id)
+    await productService.restoreDefaults(DatabaseConnection.client);
+    return buildResponse(STATUS_CODES.OK, {
+      message: 'Products are restored to default'
     });
   } catch (e) {
     return buildResponse(STATUS_CODES.INTERNAL_SERVER_ERROR, {
@@ -45,4 +32,4 @@ export const getProductsById = async (event): Promise<APIGatewayProxyResult> => 
   }
 }
 
-export const main = middyfy(getProductsById);
+export const main = middyfy(restoreDefaultProducts);

@@ -13,83 +13,80 @@ Depending on your preferred package manager, follow the instructions below to de
 ### Using NPM
 
 - Run `npm i` to install the project dependencies
-- Run `npx sls deploy` to deploy this stack to AWS
+- Run `npm run deploy` to deploy this stack to AWS
 
-### Using Yarn
+### Task 4.1 SQL script to fill DB
 
-- Run `yarn` to install the project dependencies
-- Run `yarn sls deploy` to deploy this stack to AWS
+This PostgreSQL script was used to create `products` and `stock` tables and fill it with initial data
 
-## Test your service
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-This template contains a single lambda function triggered by an HTTP request made on the provisioned API Gateway REST API `/hello` route with `POST` method. The request body must be provided as `application/json`. The body structure is tested by API Gateway against `src/functions/hello/schema.ts` JSON-Schema definition: it must contain the `name` property.
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS stock;
 
-- requesting any other path than `/hello` with any other method than `POST` will result in API Gateway returning a `403` HTTP error code
-- sending a `POST` request to `/hello` with a payload **not** containing a string property named `name` will result in API Gateway returning a `400` HTTP error code
-- sending a `POST` request to `/hello` with a payload containing a string property named `name` will result in API Gateway returning a `200` HTTP status code with a message saluting the provided name and the detailed event processed by the lambda
+CREATE TABLE IF NOT EXISTS products (
+	id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+	title text NOT NULL,
+	description text,
+	price numeric,
+	image text
+);
 
-> :warning: As is, this template, once deployed, opens a **public** endpoint within your AWS account resources. Anybody with the URL can actively execute the API Gateway endpoint and the corresponding lambda. You should protect this endpoint with the authentication method of your choice.
+CREATE TABLE IF NOT EXISTS stock (
+	id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+	product_id uuid REFERENCES products (id),
+	count integer
+);
 
-### Locally
+INSERT INTO products (id, title, description, price, image)
+    VALUES  
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80aa', 'Sodium chloride solution', 'Sodium chloride solution for titrimetric analysis 1 AMP', 24.40, 'https://www.sigmaaldrich.com/deepweb/content/dam/sigma-aldrich/product7/095/titrisol_ampoule_titrisol_ampoule_all.jpg/_jcr_content/renditions/titrisol_ampoule_titrisol_ampoule_all-medium.jpg'),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a0', 'Acetonitrile', 'Acetonitrile for HPLC 2.5 L', 401, 'https://analyticsshop.tiny.pictures/main/import/RD34851-2.5L.jpg'),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a2', 'Potassium bromide', 'Potassium bromide for IR spectroscopy 100 G', 23, 'https://5.imimg.com/data5/LP/FT/MY-30586667/potassium-bromide-500x500.jpg'),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a1', 'Chloride Assay Kit', 'Sufficient for 100 colorimetric tests', 274, 'https://www.sigmaaldrich.com/deepweb/content/dam/sigma-aldrich/product2/199/mak_general-kits.tif/_jcr_content/renditions/mak_general-kits-large.jpg'),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a3', 'Tetrabutylammonium hydrogensulfate', 'Tetrabutylammonium hydrogensulfate 97% 100 G', 99, 'https://analyticsshop.tiny.pictures/main/import/363622.1606.jpg');
 
-In order to test the hello function locally, run the following command:
-
-- `npx sls invoke local -f hello --path src/functions/hello/mock.json` if you're using NPM
-- `yarn sls invoke local -f hello --path src/functions/hello/mock.json` if you're using Yarn
-
-Check the [sls invoke local command documentation](https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/) for more information.
-
-### Remotely
-
-Copy and replace your `url` - found in Serverless `deploy` command output - and `name` parameter in the following `curl` command in your terminal or in Postman to test your newly deployed application.
-
-```
-curl --location --request POST 'https://myApiEndpoint/dev/hello' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "Frederic"
-}'
-```
-
-## Template features
-
-### Project structure
-
-The project code base is mainly located within the `src` folder. This folder is divided in:
-
-- `functions` - containing code base and configuration for your lambda functions
-- `libs` - containing shared code base between your lambdas
-
-```
-.
-├── src
-│   ├── functions               # Lambda configuration and source code folder
-│   │   ├── hello
-│   │   │   ├── handler.ts      # `Hello` lambda source code
-│   │   │   ├── index.ts        # `Hello` lambda Serverless configuration
-│   │   │   ├── mock.json       # `Hello` lambda input parameter, if any, for local invocation
-│   │   │   └── schema.ts       # `Hello` lambda input event JSON-Schema
-│   │   │
-│   │   └── index.ts            # Import/export of all lambda configurations
-│   │
-│   └── libs                    # Lambda shared code
-│       └── apiGateway.ts       # API Gateway specific helpers
-│       └── handlerResolver.ts  # Sharable library for resolving lambda handlers
-│       └── lambda.ts           # Lambda middleware
-│
-├── package.json
-├── serverless.ts               # Serverless service file
-├── tsconfig.json               # Typescript compiler configuration
-├── tsconfig.paths.json         # Typescript paths
-└── webpack.config.js           # Webpack configuration
+INSERT INTO stock (product_id, count)
+    VALUES 
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80aa', 1),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a0', 2),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a2', 3),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a1', 4),
+    ('7567ec4b-b10c-48c5-9345-fc73c48a80a3', 5);
 ```
 
-### 3rd party libraries
+### Lambdas
 
-- [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts) - uses JSON-Schema definitions used by API Gateway for HTTP request validation to statically generate TypeScript types in your lambda's handler code base
-- [middy](https://github.com/middyjs/middy) - middleware engine for Node.Js lambda. This template uses [http-json-body-parser](https://github.com/middyjs/middy/tree/master/packages/http-json-body-parser) to convert API Gateway `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object
-- [@serverless/typescript](https://github.com/serverless/typescript) - provides up-to-date TypeScript definitions for your `serverless.ts` service file
+There are few lambdas currently in products-service:
+* `getProductsList` — returns all products from database
+* `getProductById` — finds by id and returns single product from database 
+* `addProduct` — adds single product to database
+* `restoreDefaultProducts` — restore initial products in database (as in SQL script above)
 
-### Advanced usage
+### Endpoints
 
-Any tsconfig.json can be used, but if you do, set the environment variable `TS_NODE_CONFIG` for building the application, eg `TS_NODE_CONFIG=./tsconfig.app.json npx serverless webpack`
+Their APIGateway endpoints:
+* `getProductsList` — GET - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products
+* `getProductById` — GET - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products/{productId}
+* `addProduct` — POST - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products
+* `restoreDefaultProducts` — PUT - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products-default
+
+More about endpoints at [SWAGGER](https://app.swaggerhub.com/apis/AlreadyBored/shop-be/1.0.0) (you can also look at `openapi.yml` in product-service root folder).
+
+### Frontend
+
+[Link to frontend](https://d20o7asvvy1rtc.cloudfront.net)
+
+Products on frontend are now integreated with database. Try it out by using `addProduct` lambda:
+1. Add product using POSTMAN or SWAGGER (see above)
+2. Refresh frontend page
+3. Newly created product appears
+
+P.S. I recommend you to run `restoreDefaultProducts` lambda to clear database from products created by previous cross-checker before you try it :)
+
+[Link to frontend repository (if needed)](https://github.com/AlreadyBored/shop-vue-vuex-cloudfront)
+
+### Transactions
+
+Product creation process is implemented using SQL transactions (look at method `addProduct` in `src/repositories/product.ts`)
