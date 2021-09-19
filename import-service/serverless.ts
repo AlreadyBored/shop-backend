@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
-
 import importProductsFile from '@functions/importProductsFile';
+import { BUCKET_NAME } from './src/utils/constants';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -24,9 +24,22 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
     lambdaHashingVersion: '20201221',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 's3:ListBucket',
+        Resource: `arn:aws:s3:::${BUCKET_NAME}`,
+      },
+      {
+        Effect: 'Allow',
+        Action: 's3:*',
+        Resource: `arn:aws:s3:::${BUCKET_NAME}/*`,
+      },
+    ],
   },
   // import the function via paths
   functions: { importProductsFile },
+
 };
 
 module.exports = serverlessConfiguration;
