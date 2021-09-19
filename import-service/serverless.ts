@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-import importProductsFile from '@functions/importProductsFile';
+import { importProductsFile, importFileParser } from './src/functions';
 import { BUCKET_NAME } from './src/utils/constants';
 
 const serverlessConfiguration: AWS = {
@@ -38,7 +38,7 @@ const serverlessConfiguration: AWS = {
     ],
   },
   // import the function via paths
-  functions: { importProductsFile },
+  functions: { importProductsFile, importFileParser },
 
 };
 
