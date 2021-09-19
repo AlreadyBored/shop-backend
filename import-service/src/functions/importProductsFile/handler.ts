@@ -15,7 +15,7 @@ const importProductsFile = async (event): Promise<APIGatewayProxyResult> => {
 
     const params = {
       Bucket: BUCKET_NAME,
-      Prefix: prefix,
+      Key: prefix,
       Expires: SIGNED_URL_EXPIRATION,
       ContentType: 'text/csv'
     };
