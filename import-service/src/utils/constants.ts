@@ -10,7 +10,9 @@ export const CORS_HEADERS = {
     'Access-Control-Allow-Credentials': true,
 };
 
-export const BUCKET_NAME = 'import-service-bucket';
+export const BUCKET_NAME = 'import-service-bucket-rss';
 export const REGION = 'eu-west-1';
 export const SIGNED_URL_EXPIRATION = 45;
 export const UPLOAD_PREFIX = 'uploaded';
+
+export const getInternalServerErrorMessage = err => `Something went wrong on server side: ${err}`;

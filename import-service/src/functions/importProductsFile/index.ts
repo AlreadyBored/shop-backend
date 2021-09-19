@@ -5,11 +5,11 @@ export default {
   events: [
     {
       http: {
-        method: 'post',
-        path: 'hello',
+        method: 'get',
+        path: 'import',
         request: {
           parameters: {
-            queryStrings: {
+            querystrings: {
               name: true
             }
           }
