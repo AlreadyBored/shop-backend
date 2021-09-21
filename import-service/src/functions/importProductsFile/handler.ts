@@ -9,7 +9,7 @@ import { logRequest } from '../../utils/consoleLogger';
 
 const { OK, INTERNAL_SERVER_ERROR } = STATUS_CODES
 
-const importProductsFile = async (event): Promise<APIGatewayProxyResult> => {
+export const importProductsFile = async (event): Promise<APIGatewayProxyResult> => {
   try {
     const { body, pathParameters, queryStringParameters, headers } = event;
     logRequest({ event, body, pathParameters, queryStringParameters, headers });
