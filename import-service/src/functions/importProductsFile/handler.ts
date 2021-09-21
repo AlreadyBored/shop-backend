@@ -4,11 +4,15 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { middyfy } from '@libs/lambda';
 import { BUCKET_NAME, SIGNED_URL_EXPIRATION, UPLOAD_PREFIX, REGION, STATUS_CODES, getInternalServerErrorMessage } from '../../utils/constants';
 import AWS from 'aws-sdk';
+import { logRequest } from '../../utils/consoleLogger';
+
 
 const { OK, INTERNAL_SERVER_ERROR } = STATUS_CODES
 
 const importProductsFile = async (event): Promise<APIGatewayProxyResult> => {
   try {
+    const { body, pathParameters, queryStringParameters, headers } = event;
+    logRequest({ event, body, pathParameters, queryStringParameters, headers });
     const { name } = event.queryStringParameters;
 
     const prefix = `${UPLOAD_PREFIX}/${name}`;

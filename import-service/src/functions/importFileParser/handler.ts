@@ -14,14 +14,14 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
     console.log('[EVENT]', event);
 
     Records.forEach(record => {
+      console.log('[RECORD]', record);
+
       const { key: fileName } = record.s3.object;
 
       const params = {
         Bucket: BUCKET_NAME,
         Key: fileName
       };
-
-      console.log('[PARAMS]', params);
 
       const s3Bucket = new AWS.S3({ region: REGION });
 
@@ -31,7 +31,7 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
 
       s3ReadableStream.pipe(cvs())
         .on('data', (chunk) => {
-          console.log(`Recieved part of data ${chunk.toString()}`);
+          console.log(`Recieved part of data ${JSON.stringify(chunk.toString())}`);
         })
         .on('error', (e) => {
           throw new Error(`Error occured: ${e}`);
