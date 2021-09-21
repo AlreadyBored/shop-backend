@@ -16,7 +16,9 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
     Records.forEach(record => {
       console.log('[RECORD]', record);
 
-      const { key: fileName } = record.s3.object;
+      const { key } = record.s3.object;
+
+      const fileName = decodeURIComponent(key);
 
       const params = {
         Bucket: BUCKET_NAME,
