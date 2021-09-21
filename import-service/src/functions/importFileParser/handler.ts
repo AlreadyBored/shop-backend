@@ -33,7 +33,7 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
 
       s3ReadableStream.pipe(cvs())
         .on('data', (chunk) => {
-          console.log(`Recieved part of data ${JSON.stringify(chunk.toString())}`);
+          console.log(`Recieved part of data ${JSON.stringify(chunk)}`);
         })
         .on('error', (e) => {
           throw new Error(`Error occured: ${e}`);
