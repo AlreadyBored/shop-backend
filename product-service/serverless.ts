@@ -63,6 +63,22 @@ const serverlessConfiguration: AWS = {
         Properties: {
           QueueName: 'catalog-items-sqs-queue'
         }
+      },
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'catalog-items-sns-topic'
+        }
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: 'shilaums@gmail.com',
+          TopicArn: {
+            Ref: 'SNSTopic'
+          }
+        }
       }
     }
   },
