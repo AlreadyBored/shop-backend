@@ -1,6 +1,11 @@
 import type { AWS } from '@serverless/typescript';
+import dotenv from 'dotenv';
 import { importProductsFile, importFileParser } from './src/functions';
 import { BUCKET_NAME } from './src/utils/constants';
+
+dotenv.config({
+  path: __dirname + './env'
+});
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -22,6 +27,7 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: '${env:SQS_URL}'
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [

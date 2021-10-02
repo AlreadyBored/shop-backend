@@ -41,7 +41,7 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
           console.log(`Recieved part of data ${chunkStringified}`);
 
           const message = {
-            QueueUrl: 'https://sqs.eu-west-1.amazonaws.com/379232632208/catalog-items-sqs-queue',
+            QueueUrl: process.env.SQS_URL,
             MessageBody: chunkStringified
           };
 
