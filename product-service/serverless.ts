@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 import dotenv from 'dotenv';
-import { getProductsList, getProductById, addProduct, restoreDefaultProducts } from './src/functions';
+import { getProductsList, getProductById, addProduct, restoreDefaultProducts, catalogBatchProcess } from './src/functions';
 import { ChemicalSchema, ChemicalsSchema } from './src/schemas';
 
 dotenv.config({
@@ -56,7 +56,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { getProductsList, getProductById, addProduct, restoreDefaultProducts },
+  functions: { getProductsList, getProductById, addProduct, restoreDefaultProducts, catalogBatchProcess },
 };
 
 module.exports = serverlessConfiguration;
