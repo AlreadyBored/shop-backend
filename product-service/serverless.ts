@@ -50,7 +50,7 @@ const serverlessConfiguration: AWS = {
       {
         Effect: 'Allow',
         Action: 'sns:*',
-        Resource: 'arn:aws:sns:eu-west-1:379232632208:catalog-items-sns-topic'
+        Resource: '${env:SNS_TOPIC_ARN}'
       }
     ],
     environment: {
@@ -59,7 +59,8 @@ const serverlessConfiguration: AWS = {
       PG_PORT: '${env:PG_PORT}',
       PG_DATABASE: '${env:PG_DATABASE}',
       PG_USERNAME: '${env:PG_USERNAME}',
-      PG_PASSWORD: '${env:PG_PASSWORD}'
+      PG_PASSWORD: '${env:PG_PASSWORD}',
+      SNS_TOPIC_ARN: '${env:SNS_TOPIC_ARN}',
     },
     lambdaHashingVersion: '20201221',
   },
@@ -81,7 +82,7 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::SNS::Subscription',
         Properties: {
           Protocol: 'email',
-          Endpoint: 'shilaums@gmail.com',
+          Endpoint: '${env:SNS_EMAIL_1}',
           TopicArn: {
             Ref: 'SNSTopic'
           }

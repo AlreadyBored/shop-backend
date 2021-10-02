@@ -27,7 +27,7 @@ export const catalogBatchProcess = async (event) => {
     const snsMessage = {
       Subject: 'Some products were added to database',
       Message: `Plus ${Records.length} product(s) in DB`,
-      TopicArn: 'arn:aws:sns:eu-west-1:379232632208:catalog-items-sns-topic'
+      TopicArn: process.env.SNS_TOPIC_ARN
     };
 
     await sns.publish(snsMessage).promise();
