@@ -66,4 +66,17 @@ export class ProductRepository {
         }
     }
 
+    async addManyProducts(products) {
+        try {
+            const createdProducts = [];
+            for (const product of products) {
+                const createdProduct = await this.addProduct(product);
+                createdProducts.push(createdProduct);
+            }
+            return createdProducts;
+        } catch (e) {
+            throw e;
+        }
+    }
+
 }
