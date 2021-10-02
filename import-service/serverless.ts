@@ -9,6 +9,7 @@ dotenv.config({
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
+  useDotenv: true,
   frameworkVersion: '2',
   custom: {
     webpack: {
