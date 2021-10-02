@@ -6,18 +6,19 @@ import * as productService from '../../services/product';
 
 export const catalogBatchProcess = async (event) => {
   let isConnected = false;
-  
+
   try {
     console.log('[EVENT]', event);
+    const { Records } = event;
 
     await DatabaseConnection.createClient();
     await DatabaseConnection.connect();
 
     isConnected = true;
 
-    const products = await productService.addManyProducts(DatabaseConnection.client, event.body);
+    const product = await productService.addManyProducts(DatabaseConnection.client, Records);
 
-    console.log('[PRODUCTS]', products);
+    console.log('[PRODUCTS]', product);
 
   } catch (e) {
     const message = getInternalServerErrorMessage(e);

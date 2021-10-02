@@ -22,7 +22,10 @@ export const addProduct = async (client, productDTO) => {
     return await productsRepository.addProduct(productDTO);
 };
 
-export const addManyProducts = async (client, products) => {
+export const addManyProducts = async (client, messages) => {
     const productsRepository = new ProductRepository(client);
+
+    const products = messages.map(message => (JSON.parse(message.body)));
+
     return await productsRepository.addManyProducts(products);
 };
