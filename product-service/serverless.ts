@@ -56,6 +56,16 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalog-items-sqs-queue'
+        }
+      }
+    }
+  },
   functions: { getProductsList, getProductById, addProduct, restoreDefaultProducts, catalogBatchProcess },
 };
 
