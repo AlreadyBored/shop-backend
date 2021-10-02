@@ -9,9 +9,12 @@ import cvs from 'csv-parser';
 const { ACCEPTED, INTERNAL_SERVER_ERROR } = STATUS_CODES
 
 const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
+  
   try {
     const { Records } = event;
     console.log('[EVENT]', event);
+
+    const s3Bucket = new AWS.S3({ region: REGION });
 
     Records.forEach(record => {
       console.log('[RECORD]', record);
@@ -24,8 +27,6 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
         Bucket: BUCKET_NAME,
         Key: fileName
       };
-
-      const s3Bucket = new AWS.S3({ region: REGION });
 
       const s3Object = s3Bucket.getObject(params);
 
