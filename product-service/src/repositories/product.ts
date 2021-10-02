@@ -30,7 +30,7 @@ export class ProductRepository {
     }
 
     async addProduct(productDTO) {
-        const { id, title, description, price, image } = productDTO;
+        const { id, title, description, price, image, count } = productDTO;
 
         try {
             await this._client.query('begin');
@@ -47,7 +47,7 @@ export class ProductRepository {
             await this._client.query(`
                 INSERT INTO 
                 stock (product_id, count)
-                VALUES ('${createdProductId}', 1)
+                VALUES ('${createdProductId}', ${count})
             `);
 
             const fullProduct = await this._client.query(`
