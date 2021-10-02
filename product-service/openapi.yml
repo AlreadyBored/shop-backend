@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers: 
-  - url: https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev
+  - url: https://jr7mz7c9nc.execute-api.eu-west-1.amazonaws.com/dev
 components:
   schemas:
     Chemical:
@@ -43,6 +43,9 @@ components:
         image:
           type: string
           description: Link to chemical image
+        count:
+          type: integer
+          description: Chemical count
       additionalProperties: false
     Chemicals:
       title: Schema of multiple chemicals
