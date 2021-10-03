@@ -50,7 +50,9 @@ const serverlessConfiguration: AWS = {
       {
         Effect: 'Allow',
         Action: 'sns:*',
-        Resource: '${env:SNS_TOPIC_ARN}'
+        Resource: {
+          Ref: 'SNSTopic'
+        }
       }
     ],
     environment: {
@@ -60,7 +62,9 @@ const serverlessConfiguration: AWS = {
       PG_DATABASE: '${env:PG_DATABASE}',
       PG_USERNAME: '${env:PG_USERNAME}',
       PG_PASSWORD: '${env:PG_PASSWORD}',
-      SNS_TOPIC_ARN: '${env:SNS_TOPIC_ARN}',
+      SNS_TOPIC_ARN: {
+        Ref: 'SNSTopic'
+      },
     },
     lambdaHashingVersion: '20201221',
   },
