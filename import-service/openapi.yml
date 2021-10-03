@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers: 
-  - url: https://1j2lf9z0dj.execute-api.eu-west-1.amazonaws.com/dev/
+  - url: https://hifx2vr6f4.execute-api.eu-west-1.amazonaws.com/dev
 info:
   title: Shop-BE import-service
   description: Import chemicals service
