@@ -6,7 +6,7 @@ export default {
     {
       sqs: {
         batchSize: 5,
-        arn: { 'Fn::GetAtt': ['SQSQueue', 'Arn'] },
+        arn: '${cf:import-service-dev.SQSArn}',
       }
     }
   ]

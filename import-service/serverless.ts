@@ -1,11 +1,6 @@
 import type { AWS } from '@serverless/typescript';
-import dotenv from 'dotenv';
 import { importProductsFile, importFileParser } from './src/functions';
 import { BUCKET_NAME } from './src/utils/constants';
-
-dotenv.config({
-  path: __dirname + './env'
-});
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -28,7 +23,9 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      SQS_URL: '${env:SQS_URL}'
+      SQS_URL: {
+        Ref: 'SQSQueue'
+      }
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -45,9 +42,31 @@ const serverlessConfiguration: AWS = {
       {
         Effect: 'Allow',
         Action: 'sqs:*',
-        Resource: 'arn:aws:sqs:eu-west-1:379232632208:catalog-items-sqs-queue'
+        Resource: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn']
+        }
       }
     ],
+  },
+  resources: {
+    Outputs: {
+      SQSArn: {
+        Value: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn']
+        },
+        Export: {
+          Name: 'SQSArn'
+        }
+      }
+    },
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalog-items-sqs-queue'
+        }
+      }
+    }
   },
   // import the function via paths
   functions: { importProductsFile, importFileParser },

@@ -66,12 +66,6 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
-      SQSQueue: {
-        Type: 'AWS::SQS::Queue',
-        Properties: {
-          QueueName: 'catalog-items-sqs-queue'
-        }
-      },
       SNSTopic: {
         Type: 'AWS::SNS::Topic',
         Properties: {
