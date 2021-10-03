@@ -76,13 +76,29 @@ const serverlessConfiguration: AWS = {
           TopicName: 'catalog-items-sns-topic'
         }
       },
-      SNSSubscription: {
+      SingleAdditionSubscription: {
         Type: 'AWS::SNS::Subscription',
         Properties: {
           Protocol: 'email',
           Endpoint: '${env:SNS_EMAIL_1}',
           TopicArn: {
             Ref: 'SNSTopic'
+          },
+          FilterPolicy: {
+            productsCount: [{ numeric: ['=', 1] }]
+          }
+        }
+      },
+      MultipleAdditionSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          Endpoint: '${env:SNS_EMAIL_2}',
+          TopicArn: {
+            Ref: 'SNSTopic'
+          },
+          FilterPolicy: {
+            productsCount: [{ numeric: ['>', 1] }]
           }
         }
       }

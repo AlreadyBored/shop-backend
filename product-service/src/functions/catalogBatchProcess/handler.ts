@@ -22,12 +22,20 @@ export const catalogBatchProcess = async (event) => {
 
     const products = await productService.addManyProducts(DatabaseConnection.client, Records);
 
+    const productsCount = Records.length;
+
     console.log('[PRODUCTS]', products);
 
     const snsMessage = {
       Subject: 'Some products were added to database',
-      Message: `Plus ${Records.length} product(s) in DB`,
-      TopicArn: process.env.SNS_TOPIC_ARN
+      Message: `Plus ${productsCount} product(s) in DB`,
+      TopicArn: process.env.SNS_TOPIC_ARN,
+      MessageAttributes: {
+        productsCount: {
+          DataType: 'Number',
+          StringValue: `${productsCount}`
+        }
+      }
     };
 
     await sns.publish(snsMessage).promise();
