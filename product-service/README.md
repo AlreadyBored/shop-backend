@@ -67,16 +67,16 @@ There are few lambdas currently in products-service:
 ### Endpoints
 
 Their APIGateway endpoints:
-* `getProductsList` — GET - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products
-* `getProductById` — GET - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products/{productId}
-* `addProduct` — POST - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products
-* `restoreDefaultProducts` — PUT - https://nkoz58izxd.execute-api.eu-west-1.amazonaws.com/dev/products-default
+* `getProductsList` — GET - https://icqa4iybt4.execute-api.eu-west-1.amazonaws.com/dev/products
+* `getProductById` — GET - https://icqa4iybt4.execute-api.eu-west-1.amazonaws.com/dev/products/{productId}
+* `addProduct` — POST - https://icqa4iybt4.execute-api.eu-west-1.amazonaws.com/dev/products
+* `restoreDefaultProducts` — PUT - https://icqa4iybt4.execute-api.eu-west-1.amazonaws.com/dev/products-default
 
 More about endpoints at [SWAGGER](https://app.swaggerhub.com/apis/AlreadyBored/shop-be/1.0.0) (you can also look at `openapi.yml` in product-service root folder).
 
 ### Frontend
 
-[Link to frontend](https://d20o7asvvy1rtc.cloudfront.net)
+[Link to frontend](https://dajtpag5srf3l.cloudfront.net/)
 
 Products on frontend are now integreated with database. Try it out by using `addProduct` lambda:
 1. Add product using POSTMAN or SWAGGER (see above)
