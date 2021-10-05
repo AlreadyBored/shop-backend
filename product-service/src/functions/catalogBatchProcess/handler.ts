@@ -42,6 +42,11 @@ export const catalogBatchProcess = async (event) => {
 
     console.log('Info about products was sent to email');
 
+    return {
+      products,
+      snsMessage
+    };
+
   } catch (e) {
     const message = getInternalServerErrorMessage(e);
     console.log(message);

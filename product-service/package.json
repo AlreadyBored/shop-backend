@@ -5,7 +5,8 @@
   "main": "serverless.ts",
   "scripts": {
     "docs": "sls openapi generate -o openapi.yml -f yaml -i 2",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "test": "jest"
   },
   "engines": {
     "node": ">=14.15.0"
