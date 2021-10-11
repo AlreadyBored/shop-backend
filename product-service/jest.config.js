@@ -7,6 +7,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '@libs/(.*)': '<rootDir>/src/libs/$1',
-    '@db/(.*)': '<rootDir>/src/db/$1'
+    '@db/(.*)': '<rootDir>/src/db/$1',
+    '@src/(.*)': '<rootDir>/src/$1'
   }
 };

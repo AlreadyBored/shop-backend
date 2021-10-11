@@ -4,6 +4,7 @@ import { BUCKET_NAME } from './src/utils/constants';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
+  useDotenv: true,
   frameworkVersion: '2',
   custom: {
     webpack: {
@@ -22,6 +23,9 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: {
+        Ref: 'SQSQueue'
+      }
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -35,7 +39,34 @@ const serverlessConfiguration: AWS = {
         Action: 's3:*',
         Resource: `arn:aws:s3:::${BUCKET_NAME}/*`,
       },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn']
+        }
+      }
     ],
+  },
+  resources: {
+    Outputs: {
+      SQSArn: {
+        Value: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn']
+        },
+        Export: {
+          Name: 'SQSArn'
+        }
+      }
+    },
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalog-items-sqs-queue'
+        }
+      }
+    }
   },
   // import the function via paths
   functions: { importProductsFile, importFileParser },

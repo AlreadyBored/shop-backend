@@ -30,7 +30,7 @@ export class ProductRepository {
     }
 
     async addProduct(productDTO) {
-        const { id, title, description, price, image } = productDTO;
+        const { id, title, description, price, image, count } = productDTO;
 
         try {
             await this._client.query('begin');
@@ -47,7 +47,7 @@ export class ProductRepository {
             await this._client.query(`
                 INSERT INTO 
                 stock (product_id, count)
-                VALUES ('${createdProductId}', 1)
+                VALUES ('${createdProductId}', ${count})
             `);
 
             const fullProduct = await this._client.query(`
@@ -62,6 +62,19 @@ export class ProductRepository {
             return fullProduct.rows[0];
         } catch (e) {
             await this._client.query('rollback');
+            throw e;
+        }
+    }
+
+    async addManyProducts(products) {
+        try {
+            const createdProducts = [];
+            for (const product of products) {
+                const createdProduct = await this.addProduct(product);
+                createdProducts.push(createdProduct);
+            }
+            return createdProducts;
+        } catch (e) {
             throw e;
         }
     }

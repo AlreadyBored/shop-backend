@@ -28,7 +28,7 @@ Depending on your preferred package manager, follow the instructions below to de
 ## Evaluation criteria
  
 - **1** - File **serverless.yml** contains configuration for **importProductsFile** function (look at `serverless.ts` at root folder) [V]
-- **3** - The **importProductsFile** lambda function returns a correct response which can be used to upload a file into the **S3** bucket (`importProductsFile` invoke url is `https://1j2lf9z0dj.execute-api.eu-west-1.amazonaws.com/dev/import?name=<FILENAME>`, can be tested using POSTMAN or SWAGGER)[V]
+- **3** - The **importProductsFile** lambda function returns a correct response which can be used to upload a file into the **S3** bucket (`importProductsFile` invoke url is `https://hifx2vr6f4.execute-api.eu-west-1.amazonaws.com/dev/import?name=<FILENAME>`, can be tested using POSTMAN or SWAGGER)[V]
 - **4** - Frontend application is integrated with **importProductsFile** lambda [V]
 - **5** - The **importFileParser** lambda function is implemented and **serverless.yml** contains configuration for the lambda (look at `serverless.ts` at root folder) [V]
 Logs from `importFileParser`:
@@ -40,7 +40,7 @@ Logs from `importFileParser`:
 ---
 
 Links:
-1. `importProductsFile` lambda `https://1j2lf9z0dj.execute-api.eu-west-1.amazonaws.com/dev/import?name=<FILENAME>`
+1. `importProductsFile` lambda `https://hifx2vr6f4.execute-api.eu-west-1.amazonaws.com/dev/import?name=<FILENAME>`
 2. SWAGGER https://app.swaggerhub.com/apis/AlreadyBored/import-service/1.0.0
 3. Frontend https://dajtpag5srf3l.cloudfront.net/admin/products
 4. Frontend PR https://github.com/AlreadyBored/shop-vue-vuex-cloudfront/pull/4

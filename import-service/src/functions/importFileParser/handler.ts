@@ -9,9 +9,13 @@ import cvs from 'csv-parser';
 const { ACCEPTED, INTERNAL_SERVER_ERROR } = STATUS_CODES
 
 const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
+
   try {
     const { Records } = event;
     console.log('[EVENT]', event);
+
+    const s3Bucket = new AWS.S3({ region: REGION });
+    const sqs = new AWS.SQS({ region: REGION });
 
     Records.forEach(record => {
       console.log('[RECORD]', record);
@@ -25,15 +29,23 @@ const importFileParser = async (event): Promise<APIGatewayProxyResult> => {
         Key: fileName
       };
 
-      const s3Bucket = new AWS.S3({ region: REGION });
-
       const s3Object = s3Bucket.getObject(params);
 
       const s3ReadableStream = s3Object.createReadStream();
 
       s3ReadableStream.pipe(cvs())
-        .on('data', (chunk) => {
-          console.log(`Recieved part of data ${JSON.stringify(chunk)}`);
+        .on('data', async (chunk) => {
+
+          const chunkStringified = JSON.stringify(chunk);
+
+          console.log(`Recieved part of data ${chunkStringified}`);
+
+          const message = {
+            QueueUrl: process.env.SQS_URL,
+            MessageBody: chunkStringified
+          };
+
+          await sqs.sendMessage(message).promise();
         })
         .on('error', (e) => {
           throw new Error(`Error occured: ${e}`);
