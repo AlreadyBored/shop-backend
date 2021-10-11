@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-
+import { REGION } from './src/utils/constants';
 import basicAuthorizer from '@functions/basicAuthorizer';
 
 const serverlessConfiguration: AWS = {
@@ -20,6 +20,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
+    region: REGION,
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
