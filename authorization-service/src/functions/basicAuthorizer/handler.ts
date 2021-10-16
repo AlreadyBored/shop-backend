@@ -1,22 +1,16 @@
 import 'source-map-support/register';
-import { buildResponse } from '@libs/apiGateway';
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayTokenAuthorizerEvent, APIGatewayAuthorizerCallback } from 'aws-lambda';
 import { middyfy } from '@libs/lambda';
-import { STATUS_CODES, getInternalServerErrorMessage } from '../../utils/constants';
+import { getInternalServerErrorMessage } from '../../utils/constants';
 import { generatePolicy } from '../../utils/generatePolicy';
 import { logRequest } from '../../utils/consoleLogger';
 
-
-const { OK, INTERNAL_SERVER_ERROR, UNAUTHORIZED } = STATUS_CODES;
-
-export const basicAuthorizer = async (event): Promise<APIGatewayProxyResult> => {
+export const basicAuthorizer = async (event: APIGatewayTokenAuthorizerEvent, _ctx, cb: APIGatewayAuthorizerCallback) => {
   try {
     logRequest(event);
 
-    if (event['type'] !== 'TOKEN') {
-      return buildResponse(UNAUTHORIZED, {
-        message: 'Unauthorized'
-      });
+    if (event.type !== 'TOKEN') {
+      cb('Unauthorized');
     }
 
     const authorizationToken = event.authorizationToken;
@@ -30,13 +24,13 @@ export const basicAuthorizer = async (event): Promise<APIGatewayProxyResult> => 
 
     const storedUserPassword = process.env[username];
     const effect = !storedUserPassword || storedUserPassword !== password ? 'Deny' : 'Allow';
-
     const policy = generatePolicy(encodedCreds, event.methodArn, effect);
 
-    return buildResponse(OK, { policy });
+    cb(null, policy);
   } catch (e) {
     const message = getInternalServerErrorMessage(e);
-    return buildResponse(INTERNAL_SERVER_ERROR, { message });
+    console.log('[ERROR OCCURED]', message);
+    cb('Unauthorized');
   }
 };
 
