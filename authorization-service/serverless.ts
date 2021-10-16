@@ -17,6 +17,18 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
     },
   },
+  resources: {
+    Outputs: {
+      AuthorizerARN: {
+        Value: {
+          'Fn::GetAtt': ['BasicAuthorizerLambdaFunction', 'Arn']
+        },
+        Export: {
+          Name: 'AuthorizerARN'
+        }
+      }
+    },
+  },
   plugins: ['serverless-esbuild'],
   provider: {
     name: 'aws',
