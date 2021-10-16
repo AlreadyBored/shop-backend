@@ -11,6 +11,11 @@ export const CORS_HEADERS = {
     'Access-Control-Allow-Credentials': true,
 };
 
+export const API_GATEWAY_RESPONSE_PARAMS = {
+    'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+    'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+};
+
 export const BUCKET_NAME = 'import-service-bucket-rss';
 export const REGION = 'eu-west-1';
 export const SIGNED_URL_EXPIRATION = 45;
