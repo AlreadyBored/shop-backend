@@ -5,6 +5,7 @@ import basicAuthorizer from '@functions/basicAuthorizer';
 const serverlessConfiguration: AWS = {
   service: 'authorization-service',
   frameworkVersion: '2',
+  useDotenv: true,
   custom: {
     esbuild: {
       bundle: true,
@@ -28,6 +29,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      TEST_USERNAME: '${env:TEST_USERNAME}'
     },
     lambdaHashingVersion: '20201221',
   },
