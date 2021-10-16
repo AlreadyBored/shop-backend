@@ -1,11 +1,11 @@
-export const generatePolicy = (principalId, resource, effect = 'Allow') => {
+export const generatePolicy = (principalId, resource, effect = 'Deny') => {
     return {
         principalId,
         policyDocument: {
             Version: '2012-10-17',
             Statement: [
                 {
-                    Action: 'execure-api:Invoke',
+                    Action: 'execute-api:Invoke',
                     Effect: effect,
                     Resource: resource
                 }
