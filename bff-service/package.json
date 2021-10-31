@@ -1,0 +1,29 @@
+{
+  "name": "bff-service",
+  "version": "1.0.0",
+  "description": "Task 9 backend for frontend service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/AlreadyBored/shop-backend.git"
+  },
+  "keywords": [
+    "rss",
+    "aws",
+    "eb"
+  ],
+  "author": "alreadybored",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlreadyBored/shop-backend/issues"
+  },
+  "homepage": "https://github.com/AlreadyBored/shop-backend#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
