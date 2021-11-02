@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const axios = require('axios').default;
 const { DEFAULT_PORT, STATUS_CODES } = require('./utils/constants');
 const { logRequest: consoleLogger } = require('./utils/consoleLogger');
+const { fixURL } = require('./utils/fixUrl');
 
 dotenv.config();
 
@@ -19,7 +20,12 @@ app.all('/*', async (req, res) => {
 
     consoleLogger({ method, originalUrl, body });
 
-    const [, recipient] = originalUrl.split('/');
+    const urlParts = originalUrl.split('/');
+    const [, recipient] = urlParts;
+
+    let fixedRequestedURL = originalUrl;
+
+    if (urlParts.length >= 3) fixedRequestedURL = req.originalUrl.replace(`/${recipient}`, '');
 
     console.log('[recipient]', recipient);
 
@@ -30,7 +36,7 @@ app.all('/*', async (req, res) => {
     if (recipientURL) {
         const axiosConfig = {
             method,
-            url: `${recipientURL}${originalUrl}`,
+            url: `${recipientURL}${fixedRequestedURL}`,
             ...Object.keys(body || {}).length > 0 && { data: body }
         };
 
@@ -48,7 +54,7 @@ app.all('/*', async (req, res) => {
             }
         }
 
-        
+
     } else {
         res.status(BAD_GATEWAY).json({ message: 'Cannot process request' });
     }
