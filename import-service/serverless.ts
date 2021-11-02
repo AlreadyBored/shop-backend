@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 import { importProductsFile, importFileParser } from './src/functions';
-import { BUCKET_NAME } from './src/utils/constants';
+import { BUCKET_NAME, API_GATEWAY_RESPONSE_PARAMS } from './src/utils/constants';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -65,12 +65,31 @@ const serverlessConfiguration: AWS = {
         Properties: {
           QueueName: 'catalog-items-sqs-queue'
         }
+      },
+      GatewayResponseUnauthorized: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: API_GATEWAY_RESPONSE_PARAMS,
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+          ResponseType: 'UNAUTHORIZED'
+        },
+      },
+      GatewayResponseAccessDenied: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: API_GATEWAY_RESPONSE_PARAMS,
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+          ResponseType: 'ACCESS_DENIED'
+        },
       }
-    }
+    },
   },
   // import the function via paths
   functions: { importProductsFile, importFileParser },
-
 };
 
 module.exports = serverlessConfiguration;

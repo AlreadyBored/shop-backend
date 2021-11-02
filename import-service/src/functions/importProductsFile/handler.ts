@@ -24,7 +24,7 @@ export const importProductsFile = async (event): Promise<APIGatewayProxyResult> 
       ContentType: 'text/csv'
     };
 
-    const s3Bucket = new AWS.S3({ region: REGION });
+    const s3Bucket = new AWS.S3({ region: REGION, signatureVersion: 'v4' });
 
     const signedURL = await s3Bucket.getSignedUrlPromise('putObject', params);
 
