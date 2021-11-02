@@ -2,7 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const axios = require('axios').default;
 const { DEFAULT_PORT, STATUS_CODES } = require('./utils/constants');
-const consoleLogger = require('./utils/consoleLogger');
+const { logRequest: consoleLogger } = require('./utils/consoleLogger');
+
+dotenv.config();
 
 const { INTERNAL_SERVER_ERROR, OK, BAD_GATEWAY } = STATUS_CODES;
 
@@ -35,6 +37,7 @@ app.all('/*', async (req, res) => {
         console.log('[axiosConfig]', axiosConfig);
         try {
             const response = await axios(axiosConfig);
+            console.log('[response from recipient]', response.data);
             res.status(OK).json(response.data);
         } catch (e) {
             if (e.response) {
@@ -45,7 +48,7 @@ app.all('/*', async (req, res) => {
             }
         }
 
-        console.log('[response from recipient]', response.data);
+        
     } else {
         res.status(BAD_GATEWAY).json({ message: 'Cannot process request' });
     }
