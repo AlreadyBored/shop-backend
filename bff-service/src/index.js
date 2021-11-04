@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 const axios = require('axios').default;
 const { DEFAULT_PORT, STATUS_CODES } = require('./utils/constants');
 const { logRequest: consoleLogger } = require('./utils/consoleLogger');
-const { fixURL } = require('./utils/fixUrl');
 
 dotenv.config();
 
@@ -25,7 +24,7 @@ app.all('/*', async (req, res) => {
 
     let fixedRequestedURL = originalUrl;
 
-    if (urlParts.length >= 3) fixedRequestedURL = req.originalUrl.replace(`/${recipient}`, '');
+    if (urlParts.length >= 3 && recipient === 'cart') fixedRequestedURL = req.originalUrl.replace(`/${recipient}`, '');
 
     console.log('[recipient]', recipient);
 
