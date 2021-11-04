@@ -6,7 +6,10 @@ const STATUS_CODES = {
     BAD_GATEWAY: 502
 };
 
+const CACHE_LIFETIME_MS = 120000;
+
 module.exports = {
     DEFAULT_PORT,
-    STATUS_CODES
+    STATUS_CODES,
+    CACHE_LIFETIME_MS
 };
