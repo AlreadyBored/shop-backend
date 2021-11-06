@@ -14,9 +14,10 @@ process.on('unhandledRejection', (e) => {
 
 dotenv.config();
 
+const PORT = process.env['PORT'] ? process.env['PORT'] : 4000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(PORT);
 }
 bootstrap();
